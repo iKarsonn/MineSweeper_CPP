@@ -3,10 +3,19 @@
 #include "board.h"
 
 void Board::randomMine(){ //Girilen mayin sayisina gore mayin tarlamizi olusturan metod
+    srand(time(0));
+
     int row, col;
-    for (int i = 0; i < this->mines; i++)
+    for (int i = 0; i < this->mines;)
     {
-        
+        row = rand() % this->rows;
+        col = rand() % this->cols;
+
+        if (!this->cells[row][col].getHasMine())
+        {
+            this->cells[row][col].setHasMine(true);
+            i++;
+        }
     }
     
 }
@@ -23,6 +32,7 @@ Board::Board(int row, int col){
     }
 
     randomMine();
+    calculateSurroundingMines();
 }
 
 Board::~Board(){
@@ -57,20 +67,100 @@ void Board::flag(int row, int col){
     
 }
 
+void Board::calculateSurroundingMines(){
+    for (int i = 0; i < this->rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            int count = 0;  //Cevredeki mayin sayisini tutan gecici degisken
+
+
+            //Cevredeki hucleler tarla sinirleri icinde ise ve mayin mevcutsa kontrolu
+            if (i-1 >= 0 && j-1 >= 0 && cells[i-1][j-1].getHasMine()) count++;
+            if (i-1 >= 0 && cells[i-1][j].getHasMine()) count++;
+            if (i-1 >= 0 && j+1 < cols && cells[i-1][j+1].getHasMine()) count++;
+            if (j-1 >= 0 && cells[i][j-1].getHasMine()) count++;
+            if (j+1 < cols && cells[i][j+1].getHasMine()) count++;
+            if (i+1 < rows && j-1 >= 0 && cells[i+1][j-1].getHasMine()) count++;
+            if (i+1 < rows && cells[i+1][j].getHasMine()) count++;
+            if (i+1 < rows && j+1 < cols && cells[i+1][j+1].getHasMine()) count++;
+
+            this->cells[i][j].setSurroundingMines(count);  //En son bulunan mayin sayisi hucrenin degiskenine ataniyor
+        }
+    }
+    
+    
+}
+
 void Board::displayBoard(){
     for (int i = 0; i < this->rows; i++)
     {
         for (int j = 0; j < this->cols; j++)
         {
-            if (cells[i][j].getHasMine() == true)
+            if (!this->cells[i][j].getIsOpened())  //Hucre acilmadi ise
             {
-                std::cout << "1 ";
+                if (this->cells[i][j].getIsFlagged())  //Bayrakli ise
+                {
+                    std::cout << "F" << " ";   
+                }
+                else {
+                    std::cout << "*" << " ";  //Bayraksiz ise
+                }   
             }
-            else if(cells[i][j].getHasMine() == false){
-                std::cout << "0 ";
+            else {
+                if (!this->cells[i][j].getHasMine()) {   
+                    std::cout << this->cells[i][j].getSurroundingMines() << " ";
+                }
+                else {
+                    std::cout << "M" << " "; 
+                }
             }
         }
         std::cout << std::endl;
     }
     
+}
+
+void Board::setRows(int row){
+    this->rows = row;
+}
+
+void Board::setCols(int col){
+    this->cols = col;
+}
+
+void Board::setMines(int mine){
+    this->mines = mine;
+}
+
+void Board::uploadOpenedCells(){
+    int openedCells = 0;
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            if (this->cells[i][j].getHasMine()) //Mayin var ise
+            {
+                openedCells += 1;
+            }
+        }
+    }
+    this->openedCells = openedCells;
+    
+}
+
+int Board::getRows(){
+    return this->rows;
+}
+
+int Board::getCols(){
+    return this->cols;
+}
+
+int Board::getMines(){
+    return this->mines;
+}
+
+int Board::getOpenedCells(){
+    return this->openedCells;
 }

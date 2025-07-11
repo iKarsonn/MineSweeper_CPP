@@ -4,6 +4,7 @@ Cell::Cell(){
     this->hasMine = false;
     this->isOpened = false;
     this->isFlagged = false;
+    this->surroundingMines = 0;
 }
     
 Cell::~Cell(){
@@ -22,6 +23,9 @@ void Cell::setIsFlagged(bool boolean){
     this->isFlagged = boolean;
 }
 
+void Cell::setSurroundingMines(int surroundingMines){
+    this->surroundingMines = surroundingMines;
+}
 
 bool Cell::getHasMine(){
     return this->hasMine;
@@ -33,4 +37,8 @@ bool Cell::getIsOpened(){
 
 bool Cell::getIsFlagged(){
     return this->isFlagged;
+}
+
+int Cell::getSurroundingMines(){
+    return this->surroundingMines;
 }
