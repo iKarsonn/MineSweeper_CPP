@@ -23,7 +23,6 @@ public:
     void flag(int, int);  //Bayrak koyma methodu
     void calculateSurroundingMines();  //Bir hucrenin cevresindeki hucrelerde bulunan mayin sayisini hesaplayan method
 
-
     void displayBoard();
 
     void setRows(int);

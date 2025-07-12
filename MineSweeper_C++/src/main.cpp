@@ -1,9 +1,9 @@
 #include "game.h"
 
 int main(){
-    Game game(5,6);
-    game.simuleEt();
+    Game* game = new Game(5, 6);
+    game->simulate();
 
-    
+    delete game;
     return 0;
 }

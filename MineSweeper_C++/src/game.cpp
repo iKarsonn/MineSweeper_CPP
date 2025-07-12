@@ -28,6 +28,7 @@ void Game::inputControl(){
 }
 
 void Game::isAllOpen(){
+    this->getBoard()->uploadOpenedCells();
     if (getBoard()->getMines() + getBoard()->getOpenedCells() == getBoard()->getRows() * getBoard()->getCols())
     {
         setIsContinue(false);
@@ -51,7 +52,7 @@ bool Game::getIsContinue(){
     return this->isContinue;
 }
 
-void Game::simuleEt() {
+void Game::simulate() {
     int row, col;
     char action;
 
@@ -91,8 +92,8 @@ void Game::simuleEt() {
     board->displayBoard();
 
     if (board->getMines() + board->getOpenedCells() == board->getRows() * board->getCols()) {
-        std::cout << "\n🎉 Tebrikler! Tum guvenli hucreleri actiniz. Oyunu kazandiniz!\n";
+        std::cout << "\nTebrikler! Tum guvenli hucreleri actiniz. Oyunu kazandiniz!\n";
     } else {
-        std::cout << "\n😵 Kaybettiniz! Bir dahaki sefere daha dikkatli olun.\n";
+        std::cout << "\nKaybettiniz! Bir dahaki sefere daha dikkatli olun.\n";
     }
 }

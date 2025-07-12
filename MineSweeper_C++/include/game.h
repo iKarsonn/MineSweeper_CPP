@@ -19,7 +19,7 @@ public:
     Board* getBoard();
     bool getIsContinue();
 
-    void simuleEt();  //Oyunu simule eden method
+    void simulate();  //Oyunu simule eden method
 
 };
 

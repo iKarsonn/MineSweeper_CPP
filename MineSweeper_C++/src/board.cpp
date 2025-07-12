@@ -45,18 +45,30 @@ Board::~Board(){
 
 bool Board::shoot(int row, int col){  //Girilen hücre bilgileri tahtada mevcut mu
     if (row < 0 || row > this->rows-1 || col < 0 || col > this->cols-1)
-    {
         return false; //Mevcut degil ise metodu sonlandir
-    } 
     
-    this->cells[row][col].setIsOpened(true); //Mevcut ise hücrenin durumunu acildi yap
-
-    if (this->cells[row][col].getHasMine() == true) //Acilan hücrede mayin var ise true döndür
-    {
+    if (this->cells[row][col].getIsOpened())  //Hucre acilmissa bisey yapma
+        return false;
+    
+    this->cells[row][col].setIsOpened(true);  //Hucreyi ac
+    
+    if (this->cells[row][col].getHasMine())  //Mayin var ise oyunu bitir
         return true;
+    
+    if (this->cells[row][col].getSurroundingMines() == 0)  //Cevredeki hucreleri ac
+    {
+        shoot(row - 1, col - 1);
+        shoot(row, col - 1);
+        shoot(row + 1, col - 1);
+        shoot(row - 1, col);
+        shoot(row + 1, col);
+        shoot(row - 1, col + 1);
+        shoot(row, col + 1);
+        shoot(row + 1, col + 1);
     }
-    return false;
 
+    return false;
+    
 }
 
 void Board::flag(int row, int col){
@@ -139,14 +151,13 @@ void Board::uploadOpenedCells(){
     {
         for (int j = 0; j < cols; j++)
         {
-            if (this->cells[i][j].getHasMine()) //Mayin var ise
+            if (this->cells[i][j].getIsOpened()) //Hucre acilmis ise
             {
                 openedCells += 1;
             }
         }
     }
     this->openedCells = openedCells;
-    
 }
 
 int Board::getRows(){
